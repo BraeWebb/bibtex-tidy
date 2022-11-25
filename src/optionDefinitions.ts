@@ -400,6 +400,26 @@ export const optionDefinitions: OptionDefinition[] = [
 		],
 		type: 'number',
 	},
+        {
+                key: 'replacePageRange',
+                cli: { '--no-page-range': false },
+                toCLI: (val) => (val === false ? '--no-page-range' : undefined),
+                title: 'Replace page range',
+                description: [
+                        'Replace page ranges to be separated by two hyphens.',
+                ],
+                type: 'boolean',
+                defaultValue: true,
+        },
+        {
+                key: 'standardizeMonth',
+                cli: { '--standardize-month': true, '--no-standardize-month': false },
+                toCLI: (val) => (val ? '--standardize-month' : undefined),
+                title: 'Standardize month',
+                description: ['Standardize month to the form \'jan\''],
+                type: 'boolean',
+                defaultValue: false,
+        },
 	{
 		key: 'lowercase',
 		cli: { '--no-lowercase': false },

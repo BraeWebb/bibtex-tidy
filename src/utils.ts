@@ -122,6 +122,64 @@ export function formatPageRange(str: string): string {
 	return str;
 }
 
+/** Standardize values of the month field.
+  * The standard month field should be a three-letter abbreviation.
+  * However full names and numbers are common.
+  * https://www.bibtex.com/f/month-field/
+  */
+export function formatMonth(str: string): string {
+    const monthMap = new Map([
+        ['jan', 'jan'],
+        ['january', 'jan'],
+        ['feb', 'feb'],
+        ['february', 'feb'],
+        ['mar', 'mar'],
+        ['march', 'mar'],
+        ['apr', 'apr'],
+        ['april', 'apr'],
+        ['may', 'may'],
+        ['jun', 'jun'],
+        ['june', 'jun'],
+        ['jul', 'jul'],
+        ['july', 'jul'],
+        ['aug', 'aug'],
+        ['august', 'aug'],
+        ['sep', 'sep'],
+        ['sept', 'sep'],
+        ['september', 'sep'],
+        ['oct', 'oct'],
+        ['october', 'oct'],
+        ['nov', 'nov'],
+        ['november', 'nov'],
+        ['dec', 'dec'],
+        ['december', 'dec'],
+        ['1', 'jan'],
+        ['01', 'jan'],
+        ['2', 'feb'],
+        ['02', 'feb'],
+        ['3', 'mar'],
+        ['03', 'mar'],
+        ['4', 'apr'],
+        ['04', 'apr'],
+        ['5', 'may'],
+        ['05', 'may'],
+        ['6', 'jun'],
+        ['06', 'jun'],
+        ['7', 'jul'],
+        ['07', 'jul'],
+        ['8', 'aug'],
+        ['08', 'aug'],
+        ['9', 'sep'],
+        ['09', 'sep'],
+        ['10', 'oct'],
+        ['11', 'nov'],
+        ['12', 'dec'],
+    ]);
+    const lowerCase = str.toString().toLocaleLowerCase();
+    return monthMap.get(lowerCase) || str;
+}
+
+
 export function isEntryNode(
 	node: TextNode | BlockNode
 ): node is BlockNode & { block: EntryNode } {

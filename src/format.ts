@@ -16,6 +16,7 @@ import {
 	removeEnclosingBraces,
 	limitAuthors,
 	formatPageRange,
+        formatMonth,
 } from './utils';
 import { MONTHS } from './sort';
 import { flattenLaTeX, parseLaTeX, stringifyLaTeX } from './latexParser';
@@ -159,6 +160,8 @@ export function formatValue(
 		space,
 		enclosingBraces,
 		removeBraces,
+                replacePageRange,
+                standardizeMonth,
 	} = options;
 
 	const nameLowerCase = field.name.toLocaleLowerCase();
@@ -176,14 +179,17 @@ export function formatValue(
 			const isNumeric = value.match(/^[1-9][0-9]*$/);
 			if (isNumeric && curly) {
 				type = 'braced';
-			}
+                        }
+                        if (nameLowerCase === 'month' && standardizeMonth) {
+                                value = formatMonth(value);
+                        }
 			if (type === 'literal' || (numeric && isNumeric)) {
 				return value;
 			}
 			const dig3 = value.slice(0, 3).toLowerCase();
 			if (
 				!curly &&
-				numeric &&
+				(numeric || standardizeMonth) &&
 				nameLowerCase === 'month' &&
 				MONTH_SET.has(dig3)
 			) {
@@ -206,7 +212,7 @@ export function formatValue(
 			if (escape) {
 				value = escapeSpecialCharacters(value);
 			}
-			if (nameLowerCase === 'pages') {
+			if (nameLowerCase === 'pages' && replacePageRange) {
 				value = formatPageRange(value);
 			}
 			if (nameLowerCase === 'author' && maxAuthors) {

@@ -30,6 +30,8 @@ export type OptionsNormalized = Omit<
 	| 'removeBraces'
 	| 'generateKeys'
 	| 'blankLines'
+        | 'replacePageRange'
+        | 'standardizeMonth'
 > & {
 	align: number;
 	sort?: string[];
@@ -42,6 +44,8 @@ export type OptionsNormalized = Omit<
 	removeBraces?: string[];
 	generateKeys?: string;
 	blankLines: boolean;
+        replacePageRange: boolean;
+        standardizeMonth: boolean;
 };
 
 export function normalizeOptions(options: Options): OptionsNormalized {

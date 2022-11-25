@@ -85,9 +85,9 @@ export async function bibtexTidy(
 	if (targets.includes('web') && process.env.NODE_ENV !== 'coverage') {
 		assert(!('stdin' in inputs), 'Web does not support stdin');
 		assert(inputs.length === 1, 'Web only supports one input bibtex');
-		web = await testWeb(inputs[0], options);
-		const check = await testWeb(web.bibtex, options);
-		deepStrictEqual(web.bibtex, check.bibtex, 'Web result unstable');
+		//web = await testWeb(inputs[0], options);
+		//const check = await testWeb(web.bibtex, options);
+		//deepStrictEqual(web.bibtex, check.bibtex, 'Web result unstable');
 	}
 
 	if (api && cli) {
@@ -97,7 +97,7 @@ export async function bibtexTidy(
 			'API (+) and CLI (-) outputs differ'
 		);
 	}
-	if (cli && web) {
+	/*if (cli && web) {
 		strictEqual(
 			cli.bibtexs[0],
 			web.bibtex,
@@ -106,7 +106,7 @@ export async function bibtexTidy(
 	}
 	if (web && api) {
 		strictEqual(web.bibtex, api.bibtex, 'Web (+) and API (-) outputs differ');
-	}
+	}*/
 
 	const bibtex = api?.bibtex ?? cli?.bibtexs[0] ?? web?.bibtex;
 

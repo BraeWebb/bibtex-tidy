@@ -12607,6 +12607,27 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
     description: ['Truncate authors if above a given number into "and others".'],
     type: "number"
   }, {
+    key: "replacePageRange",
+    cli: {
+      "--no-page-range": false
+    },
+    toCLI: val => val === false ? "--no-page-range" : void 0,
+    title: "Replace page range",
+    description: ["Replace page ranges to be separated by two hyphens."],
+    type: "boolean",
+    defaultValue: true
+  }, {
+    key: "standardizeMonth",
+    cli: {
+      "--standardize-month": true,
+      "--no-standardize-month": false
+    },
+    toCLI: val => val ? "--standardize-month" : void 0,
+    title: "Standardize month",
+    description: ["Standardize month to the form 'jan'"],
+    type: "boolean",
+    defaultValue: false
+  }, {
     key: "lowercase",
     cli: {
       "--no-lowercase": false
@@ -12936,6 +12957,11 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
     }
     return str;
   }
+  function formatMonth(str) {
+    var monthMap = /* @__PURE__ */new Map([["jan", "jan"], ["january", "jan"], ["feb", "feb"], ["february", "feb"], ["mar", "mar"], ["march", "mar"], ["apr", "apr"], ["april", "apr"], ["may", "may"], ["jun", "jun"], ["june", "jun"], ["jul", "jul"], ["july", "jul"], ["aug", "aug"], ["august", "aug"], ["sep", "sep"], ["sept", "sep"], ["september", "sep"], ["oct", "oct"], ["october", "oct"], ["nov", "nov"], ["november", "nov"], ["dec", "dec"], ["december", "dec"], ["1", "jan"], ["01", "jan"], ["2", "feb"], ["02", "feb"], ["3", "mar"], ["03", "mar"], ["4", "apr"], ["04", "apr"], ["5", "may"], ["05", "may"], ["6", "jun"], ["06", "jun"], ["7", "jul"], ["07", "jul"], ["8", "aug"], ["08", "aug"], ["9", "sep"], ["09", "sep"], ["10", "oct"], ["11", "nov"], ["12", "dec"]]);
+    var lowerCase = str.toString().toLocaleLowerCase();
+    return monthMap.get(lowerCase) || str;
+  }
   function isEntryNode(node) {
     var _a;
     return node.type !== "text" && ((_a = node.block) == null ? void 0 : _a.type) === "entry";
@@ -13118,7 +13144,9 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
       tab = options.tab,
       space2 = options.space,
       enclosingBraces = options.enclosingBraces,
-      removeBraces = options.removeBraces;
+      removeBraces = options.removeBraces,
+      replacePageRange = options.replacePageRange,
+      standardizeMonth = options.standardizeMonth;
     var nameLowerCase = field.name.toLocaleLowerCase();
     var indent = tab ? "	" : " ".repeat(space2);
     var enclosingBracesFields = new Set((enclosingBraces != null ? enclosingBraces : []).map(field2 => field2.toLocaleLowerCase()));
@@ -13130,11 +13158,14 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
       if (isNumeric && curly) {
         type = "braced";
       }
+      if (nameLowerCase === "month" && standardizeMonth) {
+        value = formatMonth(value);
+      }
       if (type === "literal" || numeric && isNumeric) {
         return value;
       }
       var dig3 = value.slice(0, 3).toLowerCase();
-      if (!curly && numeric && nameLowerCase === "month" && MONTH_SET.has(dig3)) {
+      if (!curly && (numeric || standardizeMonth) && nameLowerCase === "month" && MONTH_SET.has(dig3)) {
         return dig3;
       }
       value = unwrapText(value);
@@ -13150,7 +13181,7 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
       if (escape) {
         value = escapeSpecialCharacters(value);
       }
-      if (nameLowerCase === "pages") {
+      if (nameLowerCase === "pages" && replacePageRange) {
         value = formatPageRange(value);
       }
       if (nameLowerCase === "author" && maxAuthors) {

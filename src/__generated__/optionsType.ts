@@ -157,6 +157,18 @@ export type BibTeXTidyOptions = {
 	 */
 	maxAuthors?: number;
 	/**
+	 * Replace page range
+	 *
+	 * Replace page ranges to be separated by two hyphens.
+	 */
+	replacePageRange?: boolean;
+	/**
+	 * Standardize month
+	 *
+	 * Standardize month to the form 'jan'
+	 */
+	standardizeMonth?: boolean;
+	/**
 	 * Lowercase fields
 	 *
 	 * Lowercase field names and entry type. Enabled by default.

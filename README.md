@@ -182,6 +182,12 @@ bibtex-tidy references.bib
   --max-authors
       Truncate authors if above a given number into "and others".
       
+  --no-page-range
+      Replace page ranges to be separated by two hyphens.
+      
+  --standardize-month, --no-standardize-month
+      Standardize month to the form 'jan'
+      
   --no-lowercase
       Lowercase field names and entry type. Enabled by default.
       
